@@ -1,4 +1,4 @@
-package inputs;
+package programas
 
 public class countUp {
     private int num;
@@ -8,9 +8,9 @@ public class countUp {
     }
 
     public void displayCountUp() {
-        while (num <= 10) {
+        do {
             System.out.println(num);
             num++;
-        }
+        } while (num - 1 < 10);
     }
 }

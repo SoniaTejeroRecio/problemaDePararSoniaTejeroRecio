@@ -1,0 +1,51 @@
+@startuml
+
+package Halting_Problem {
+
+    package modelo {
+        interface Maquina {
+            +setNext(Maquina maquina)
+            +getNext(): Maquina
+            +gestionar(): boolean
+        }
+        class MaquinaTuring {
+            +MaquinaTuring(Maquina next)
+            +MaquinaTuring()
+            +setNext(Maquina maquina)
+            +getNext(): Maquina
+            +gestionar(): boolean
+        }
+        class MaquinaReverser {
+            +MaquinaReverser(String programa)
+            +MaquinaReverser(Maquina next, String programa)
+            +gestionar(): boolean
+        }
+        class MaquinaHaltchecker {
+            +MaquinaHaltchecker(String programa, String input)
+            +gestionar(): boolean
+        }
+    }
+
+    package util {
+        class Utils {
+            +static metodo1()
+            +static metodo2()
+            // ...
+        }
+    }
+
+    package vista {
+        class Vista {
+            // ...
+        }
+    }
+
+}
+
+MaquinaTuring ..|> Maquina
+MaquinaReverser -up-|> MaquinaTuring
+MaquinaHaltchecker -up-|> MaquinaTuring
+modelo ..> util
+vista ..> modelo
+
+@enduml

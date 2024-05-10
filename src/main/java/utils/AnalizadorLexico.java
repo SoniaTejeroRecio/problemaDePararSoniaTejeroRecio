@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public class AnalizadorLexico {
     private String [] textoCodigo;
+    private static int variable;
 
     public AnalizadorLexico(String codigo){
         this.textoCodigo = codigo.split("\n");
@@ -27,21 +28,51 @@ public class AnalizadorLexico {
 
 
 
-    public void analizar(){
+    public boolean analizar(int a){
+        TipoIncremento tipoIncremento = TipoIncremento.NULO;
+       TipoWhile tipowhile = TipoWhile.DIFERENTE;
+
         for (String linea : textoCodigo){
             if(linea.contains("while")){
                 analizarBucle(linea);
-                TipoWhile tipowhile = analizarBucle(linea);
-
+                 tipowhile = analizarBucle(linea);
               }
-            if (linea.matches("\\s*((\\w+ =\\w+ \\+\\d+)|(\\w+ \\+=\\d+)|(\\w+\\+\\+)|(\\+\\+\\w));"){
-
+            if (linea.matches("\\s*((\\w+ =\\w+ \\+\\d+)|(\\w+ \\+=\\d+)|(\\w+\\+\\+)|(\\+\\+\\w));")){
+                tipoIncremento = TipoIncremento.POSITIVO;
             }
             if(linea.matches("\\s*((\\w+ *= *\\w+ *- *\\d+)|(\\w+ *-= *\\d+)|(\\w+--)|(--\\w*));*")){
-
+                tipoIncremento = TipoIncremento.NEGATIVO;
             }
         }
+        switch (tipowhile){
+            case MAYOR:
+                if(tipoIncremento == TipoIncremento.POSITIVO){
+                    return a < variable;
+                }else if(tipoIncremento == TipoIncremento.NEGATIVO){
+                    return a > variable;
+                }else{
+                    return false; //entra en bucle infinito (false)
+                }
+            case MENOR:
+             if (tipoIncremento == TipoIncremento.POSITIVO){
+                 return a > variable;
+                }else if(tipoIncremento == TipoIncremento.NEGATIVO){
+                    return a < variable;
+                }else{
+                 return false;
+             }
+            case IGUAL:
+                if(tipoIncremento == TipoIncremento.POSITIVO){
+                    return a <= variable;
+                }else if(tipoIncremento == TipoIncremento.NEGATIVO){
+                    return a >= variable;
 
+            }else{
+                    return a == variable;
+                }
+            default:
+                return false;
+        }
     }
 }
 
